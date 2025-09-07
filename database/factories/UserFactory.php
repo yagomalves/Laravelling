@@ -28,7 +28,7 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'profile_photo' => fake()->imageUrl(200, 200, 'people'),
+            'profile_photo' => 'https://placehold.co/200x200?text=User',
             'is_admin' => fake()->boolean(10), // 10% chance de ser admin
             'remember_token' => Str::random(10),
         ];

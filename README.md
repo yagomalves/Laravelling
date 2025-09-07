@@ -1,4 +1,4 @@
-🎬 Projeto Laravel - Sistema de Filmes
+🎬 Projeto Laravel - Sistema para Reviews de Filmes
 
 Este é um projeto pessoal em Laravel, iniciado do zero sem seguir cursos ou vídeos, com o objetivo de consolidar meu aprendizado de forma prática.
 
@@ -10,29 +10,57 @@ Posteriormente, tentei integrar o Laravel Breeze, o que gerou conflitos irrevers
 
 Por isso, decidi abandonar o código antigo e iniciar este novo projeto do zero, aplicando diretamente o que aprendi.
 
-✅ Status Atual (segundo commit)
+✅ Status Atual (terceiro commit)
 
-Autenticação implementada e funcionando corretamente (ainda sem envio de e-mails configurado).
+Todas as funcionalidades de backend foram implementadas com sucesso. O sistema está funcional e preparado para as etapas de desenvolvimento frontend.
 
-Banco de dados configurado, testado e aprovado com uso de Seeders e Factories.
+🔧 Funcionalidades Implementadas:
 
-Estrutura inicial do projeto pronta para receber novas features.
+Página de exibição dos filmes com:
+-Cartazes
+-Título
+-Descrição
+-Ano de lançamento
+-Categorias
+-Comentários
+-Avaliações (notas de 0 a 5)
+
+Sistema de Comentários e Avaliações:
+-Usuários comuns e administradores podem comentar e avaliar os filmes.
+-Administradores podem excluir comentários.
+
+Gerenciamento de Filmes:
+-Apenas administradores podem criar, editar e excluir filmes.
+
+Categorias:
+-CRUD completo, acessível apenas por administradores.
+
+
+🔐 Autenticação e Segurança
+
+Implementação de envio de e-mails com:
+-Confirmação de cadastro via link no e-mail.
+-Redefinição de senha com link seguro por e-mail.
+-Requisitos de senha forte ativados.
+-Remoção do input redundante de e-mail na view ResetPassword.
+-Proteção contra CSRF em todos os formulários.
+-Uso de middlewares para proteger rotas conforme permissões de acesso.
+
+Organização do Projeto:
+-Estruturado segundo o padrão MVC (Model-View-Controller).
+-Código limpo, modularizado e preparado para futuras melhorias no frontend.
 
 🎯 Próximos Passos
 
-Criar páginas de exibição baseadas nos dados fornecidos pelo banco.
-
-Implementar a lógica de interação entre usuários e filmes.
+A partir de agora, o foco será o desenvolvimento frontend deste projeto, bem como o início de novos projetos para ampliar ainda mais o aprendizado.
 
 📝 Funcionalidades Planejadas
 
-Dois tipos de usuários:
+Interface de usuário amigável e responsiva.
 
-Admins → podem cadastrar filmes.
+Melhorias visuais e usabilidade com frameworks CSS/JS.
 
-Usuários comuns → podem visualizar filmes, comentar e dar notas.
-
-Sistema de comentários e avaliações para cada filme.
+Integração com outros projetos para explorar conceitos como APIs, SPA, etc.
 
 ⚙️ Tecnologias Utilizadas
 
@@ -42,4 +70,10 @@ PHP
 
 MySQL
 
-Seeders & Factories para popular e validar o banco
+Seeders & Factories
+
+Middleware
+
+Autenticação via e-mail
+
+Blade Templating Engine

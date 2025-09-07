@@ -5,18 +5,36 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('welcome') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                    <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('dashboard')">
+                        Perfil
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('movies.index')" :active="request()->routeIs('dashboard')">
+                        Filmes
+                    </x-nav-link>
+                </div>
+                @if(auth()->user()->is_admin) 
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('dashboard')">
+                        Categorias
+                    </x-nav-link>
+                </div>
+                @else
+                @endif
+                
+
             </div>
+
+
+            
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -36,6 +54,13 @@
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('movies.index')">
+                            {{ __('Movies') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('categories.index')">
+                            {{ __('Categories') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -82,6 +107,10 @@
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('movies.index')">
+                    {{ __('Movies') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->

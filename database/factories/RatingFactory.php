@@ -10,8 +10,9 @@ class RatingFactory extends Factory
     {
         return [
             'rating' => fake()->numberBetween(0, 5),
-            'user_id' => \App\Models\User::factory(),
-            'movie_id' => \App\Models\Movie::factory(),
+            'user_id' => \App\Models\User::inRandomOrder()->first()->id,
+            'movie_id' => \App\Models\Movie::inRandomOrder()->first()->id,
+
         ];
     }
 }

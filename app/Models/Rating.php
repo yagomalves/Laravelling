@@ -11,7 +11,7 @@ class Rating extends Model
     protected $fillable = [
         'user_id',
         'movie_id',
-        'rating', // de 0 a 5
+        'rating',
     ];
 
     // Avaliação pertence a um usuário

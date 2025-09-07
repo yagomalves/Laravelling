@@ -28,6 +28,11 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Drama'],
             ['name' => 'Comédia'],
             ['name' => 'Terror'],
+            ['name' => 'Ficção Científica'],
+            ['name' => 'Romance'],
+            ['name' => 'Documentário'],
+            ['name' => 'Animação'],
+            ['name' => 'Fantasia'],
         ]);
 
 
@@ -40,22 +45,15 @@ class DatabaseSeeder extends Seeder
             $movie->categories()->attach(
                 $categories->random(rand(1, 3))->pluck('id')->toArray()
             );
+        
+
+
+        // Criar comentários para cada filme
+            Comment::factory(rand(1, 5))->create();
+
+            // Criar avaliações para cada filme
+            Rating::factory(rand(1,8))->create();
+
         }
-
-
-        // Comentários
-        Comment::factory(50)->create([
-            'user_id' => $users->random()->id,
-            'movie_id' => $movies->random()->id,
-        ]);
-
-
-        // Avaliações
-        Rating::factory(50)->create([
-            'user_id' => $users->random()->id,
-            'movie_id' => $movies->random()->id,
-        ]);
-
-
     }
 }

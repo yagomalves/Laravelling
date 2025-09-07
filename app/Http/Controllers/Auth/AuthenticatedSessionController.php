@@ -28,7 +28,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        session()->put('is_admin', $request->user()->is_admin);
+
+        return redirect()->intended(route('movies.index', absolute: false));
     }
 
     /**

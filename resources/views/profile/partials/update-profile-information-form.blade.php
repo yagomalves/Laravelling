@@ -21,6 +21,12 @@
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
+           
+    @if($user->is_admin == 1)
+    <span class="text-green-600 font-bold">Administrador</span>
+@else
+    <span class="text-gray-600">Usuário comum</span>
+@endif
         </div>
 
         <div>

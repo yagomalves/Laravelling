@@ -12,7 +12,8 @@ class Movie extends Model
         'title',
         'description',
         'release_date',
-        'poster', // imagem do filme
+        'image_path'
+         // imagem do filme
     ];
 
     // Filme pode ter várias categorias

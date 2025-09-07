@@ -9,8 +9,8 @@ class CommentFactory extends Factory
     {
         return [
             'content' => fake()->sentence(),
-            'user_id' => \App\Models\User::factory(),
-            'movie_id' => \App\Models\Movie::factory(),
+            'user_id' => \App\Models\User::inRandomOrder()->first()->id,
+            'movie_id' => \App\Models\Movie::inRandomOrder()->first()->id,
         ];
     }
 }
