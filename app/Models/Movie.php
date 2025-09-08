@@ -33,4 +33,15 @@ class Movie extends Model
     {
         return $this->hasMany(Rating::class);
     }
+
+    public function averageRating()
+    {
+        if ($this->ratings->count() === 0) {
+            return 0; // ou null, se preferir
+        }
+
+        return round($this->ratings->avg('rating'), 1);
+    }
+
+    
 }

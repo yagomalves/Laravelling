@@ -94,4 +94,12 @@ class MovieController extends Controller
         return redirect()->route('movies.index');
     }
 
+    public function dashboard()
+    {
+        // Pega os 5 primeiros filmes, ordene como quiser (ex: por id ou criado em)
+        $movies = Movie::with('ratings')->take(5)->get();
+
+        return view('dashboard', compact('movies'));
+    }
+
 }

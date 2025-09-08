@@ -1,165 +1,136 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Filmes</title>
-</head>
-<body>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="text-center">
 
-        <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden">
-             @if(auth()->user()->is_admin)        
-            <a href="{{ route('movies.create')}}">Adicionar Filme Novo</a>
-            <br>
-            <a href="{{ route('categories.index')}}">Categorias</a>
-            @else      
+            @if(auth()->user()->is_admin)
+            <a href="{{ route('movies.create') }}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                Adicionar Filme Novo
+            </a>
+            @else
+            <h2 class="text-2xl font-semibold text-gray-800">Comente e avalie os seus filmes favoritos!</h2>
             @endif
-
-
-
-            @if (Route::has('login'))
-                <nav class="flex items-center justify-end gap-4">
-                    @auth
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-nav-link>
-                        </form>
-                    </div>
-
-
-                    
-                    
-                        <a
-                            href="{{ url('/dashboard') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                        >
-                            Painel de Controle
-                        </a>
-                    @else
-                        <a
-                            href="{{ route('login') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal"
-                        >
-                            Log in
-                        </a>
-
-                        @if (Route::has('register'))
-                            <a
-                                href="{{ route('register') }}"
-                                >
-                                Register
-                            </a>
-                        @endif
-                    @endauth
-                </nav>
-            @endif
-        </header>
-
-        
-    <h1>Lista de Filmes</h1>
+        </div>
+    </x-slot>
 
     @if($movies->isEmpty())
-        <p>Não há filmes cadastrados ainda.</p>
+    <p class="text-center mt-8 text-gray-600">Não há filmes cadastrados ainda.</p>
     @else
+    <div class="space-y-12 mt-6">
+        @foreach ($movies as $movie)
+        <div class="max-w-4xl mx-auto bg-white shadow-sm rounded-lg overflow-hidden">
+            <div class="p-6 text-gray-900">
 
-        <ul>
-            @foreach ($movies as $movie)
-                        <h2>{{ $movie->title }}</h2> 
-                        <img src="{{ asset('storage/' . $movie->image_path) }}" alt="Pôster do filme {{ $movie->title }}">
-        <p>Descrição: {{ $movie->description }}</p>
+                <!-- Título -->
+                <h2 class="text-3xl font-bold mb-4 text-center">{{ $movie->title }}</h2>
 
+                <!-- Imagem centralizada -->
+                <div class="flex justify-center mb-6">
+                    <img
+                        src="{{ asset('storage/' . $movie->image_path) }}"
+                        alt="Pôster do filme {{ $movie->title }}"
+                        class="rounded-md max-h-96 object-contain">
+                </div>
 
-        <h3>Categorias:</h3>
-        @if($movie->categories->isEmpty())
-            <p>Nenhuma categoria associada.</p>
-        @else
-            <ul>
-                @foreach ($movie->categories as $category)
+                <!-- Descrição -->
+                <p class="mb-6 text-gray-700">{{ $movie->description }}</p>
+
+                <!-- Categorias -->
+                <h3 class="text-xl font-semibold mb-2">Categorias:</h3>
+                @if($movie->categories->isEmpty())
+                <p class="mb-4 text-gray-500">Nenhuma categoria associada.</p>
+                @else
+                <ul class="list-disc list-inside mb-6 text-gray-700">
+                    @foreach ($movie->categories as $category)
                     <li>{{ $category->name }}</li>
-                @endforeach
-            </ul>
-        @endif
+                    @endforeach
+                </ul>
+                @endif
 
+                <!-- Comentários -->
+                <h3 class="text-xl font-semibold mb-2">Comentários:</h3>
+                @if($movie->comments->isEmpty())
+                <p class="mb-4 text-gray-500">Nenhum comentário ainda.</p>
+                @else
+                <ul class="mb-6 space-y-2 text-gray-700">
+                    @foreach ($movie->comments as $comment)
+                    <li>
+                        {{ $comment->content }} - (por usuário {{ $comment->user->name }})
 
+                        @if(auth()->user()->is_admin)
+                        <form action="{{ route('movies.comments.destroy', ['id'=>$movie->id , 'commentId'=>$comment->id] ) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">
+                                Excluir
+                            </button>
+                        </form>
+                        @endif
+                    </li>
+                    @endforeach
 
-        <h3>Comentários:</h3>
-        @if($movie->comments->isEmpty())
-            <p>Nenhum comentário ainda.</p>
-        @else
-            <ul>
-                @foreach ($movie->comments as $comment)
-                    <li>{{ $comment->content }} - (por usuário {{ $comment->user->name }})
+                </ul>
+                @endif
 
-                          Formulário de exclusão 
-                    <form action="{{ route('movies.comments.destroy', ['id'=>$movie->id , 'commentId'=>$comment->id] ) }}" method="POST" style="display:inline;">
+                <!-- Avaliações -->
+                <h3 class="text-xl font-semibold mb-2">Avaliações:</h3>
+                @if($movie->ratings->isEmpty())
+                <p class="mb-6 text-gray-500">Nenhuma avaliação ainda.</p>
+                @else
+                <p class="mb-6 text-gray-700 font-medium">Média: {{ $movie->averageRating() }}</p>
+                @endif
+
+                <hr class="mb-6">
+
+                <!-- Formulário de comentário -->
+                <form action="{{ route('movies.comment', ['id'=>$movie->id]) }}" method="POST" class="mb-6">
+                    @csrf
+                    <input type="hidden" name="movie_id" value="{{ $movie->id }}">
+                    <div class="mb-2">
+                        <label for="content" class="block font-semibold mb-1">Adicionar Comentário:</label>
+                        <textarea name="content" id="content" required class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                    </div>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                        Comentar
+                    </button>
+                </form>
+
+                <!-- Formulário de avaliação -->
+                @php
+                $jaAvaliou = $movie->ratings->contains('user_id', auth()->id());
+                @endphp
+
+                @if (!$jaAvaliou)
+                <form action="{{ route('movies.rating', ['id'=>$movie->id]) }}" method="POST" class="mt-4">
+                    @csrf
+                    <input type="hidden" name="movie_id" value="{{ $movie->id }}">
+                    <div class="mb-2">
+                        <label for="rating" class="block font-semibold">Adicionar Avaliação:</label>
+                        <input type="number" name="rating" id="rating" min="0" max="5" required class="border border-gray-300 rounded px-3 py-2">
+                    </div>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Avaliar</button>
+                </form>
+                @else
+                <p class="text-green-600 font-semibold mt-4">Você já avaliou este filme.</p>
+                @endif
+
+                @if(auth()->user()->is_admin)
+                <div class="flex space-x-4">
+                    <form action="{{ route('movies.destroy', ['id'=>$movie->id]) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">
-                            Excluir
+                        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+                            DELETAR
                         </button>
                     </form>
+                    <a href="{{ route('movies.edit', ['id' => $movie->id]) }}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                        EDITAR
+                    </a>
+                </div>
+                @endif
 
-                    </li>
-                @endforeach
-            </ul>
-        @endif
-
-
-        
-
-        <h3>Avaliações:</h3>
-        @if($movie->ratings->isEmpty())
-            <p>Nenhuma avaliação ainda.</p>
-        @else
-            <ul>
-                @foreach ($movie->ratings as $rating)
-                    <li>{{ $rating->rating }} estrelas - {{ $rating->user->name }}</li>
-                @endforeach
-            </ul>
-        @endif
-
-        <hr>
-        
-            <form action="{{ route('movies.comment', ['id'=>$movie->id]) }}" method="POST" style="display:inline;">
-            @csrf
-            <input type="hidden" name="movie_id" value="{{ $movie->id }}">
-            <div>
-                <label for="content">Adicionar Comentário:</label>
-                <textarea name="content" id="content" required></textarea>
             </div>
-            <button type="submit">Comentar</button>
-
-        </form>
-
-        <form action="{{ route('movies.rating', ['id'=>$movie->id]) }}" method="POST" style="display:inline;">
-            @csrf
-            <input type="hidden" name="movie_id" value="{{ $movie->id }}">
-            <div>
-                <label for="content">Adicionar Avaliação:</label>
-                <input type="number" name="rating" id="rating" min="0" max="5" required>
-            </div>
-            <button type="submit">Avaliar</button>
-
-        </form>
-@if(auth()->user()->is_admin)
-    <form action="{{ route('movies.destroy', ['id'=>$movie->id]) }}" method="POST" style="display:inline;">
-        @csrf
-        @method('DELETE')
-        <button type="submit">DELETAR</button>
-        <a href="{{ route('movies.edit', ['id' => $movie->id]) }}">EDITAR</a>
-    </form>
-@else
-    
-@endif
-
-        <hr>
-        <hr>
-        <hr>
-            @endforeach
-        </ul>
+        </div>
+        @endforeach
+    </div>
     @endif
-</body>
-</html>
+</x-app-layout>

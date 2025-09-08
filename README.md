@@ -1,66 +1,84 @@
 🎬 Projeto Laravel - Sistema para Reviews de Filmes
 
-Este é um projeto pessoal em Laravel, iniciado do zero sem seguir cursos ou vídeos, com o objetivo de consolidar meu aprendizado de forma prática.
+Projeto pessoal desenvolvido em Laravel, iniciado totalmente do zero e sem apoio de cursos ou vídeos, com o objetivo de consolidar meu aprendizado de forma prática e autônoma.
 
 🚀 Contexto do Desenvolvimento
 
-O primeiro commit deste repositório foi inspirado em um CRUD que desenvolvi a partir de tutoriais.
-
-Posteriormente, tentei integrar o Laravel Breeze, o que gerou conflitos irreversíveis no projeto inicial.
-
-Por isso, decidi abandonar o código antigo e iniciar este novo projeto do zero, aplicando diretamente o que aprendi.
+O projeto surgiu como evolução de um CRUD que fiz a partir de tutoriais. Após problemas ao tentar integrar o Laravel Breeze, decidi abandonar a base anterior e recomeçar do zero, aplicando na prática todo o conhecimento adquirido até aqui.
 
 ✅ Status Atual (terceiro commit)
 
-Todas as funcionalidades de backend foram implementadas com sucesso. O sistema está funcional e preparado para as etapas de desenvolvimento frontend.
+Todas as funcionalidades de backend foram concluídas com sucesso.
 
-🔧 Funcionalidades Implementadas:
+O sistema está funcional, testado e com frontend reduzido.
 
-Página de exibição dos filmes com:
--Cartazes
--Título
--Descrição
--Ano de lançamento
--Categorias
--Comentários
--Avaliações (notas de 0 a 5)
+Alterações e melhorias recentes foram aplicadas com base em testes manuais e revisão de código
 
-Sistema de Comentários e Avaliações:
--Usuários comuns e administradores podem comentar e avaliar os filmes.
--Administradores podem excluir comentários.
+🔧 Funcionalidades Implementadas
+📽️ Página de Filmes
 
-Gerenciamento de Filmes:
--Apenas administradores podem criar, editar e excluir filmes.
+Exibição com:
 
-Categorias:
--CRUD completo, acessível apenas por administradores.
+Cartazes
 
+Título
+
+Descrição
+
+Ano de lançamento
+
+Categorias
+
+Comentários
+
+Avaliações (notas de 0 a 5)
+
+⭐ Sistema de Avaliações
+
+Cada usuário pode avaliar um filme apenas uma vez.
+
+A média das avaliações agora é calculada diretamente no controller, e não mais via PHP na view.
+
+Avaliações visíveis em tempo real na página do filme.
+
+💬 Comentários
+
+Usuários autenticados (comuns e admins) podem comentar.
+
+Administradores podem excluir comentários inadequados.
+
+🎬 Gerenciamento de Filmes
+
+CRUD completo de filmes disponível apenas para administradores.
+
+🏷️ Categorias
+
+CRUD de categorias com acesso restrito a administradores.
 
 🔐 Autenticação e Segurança
 
-Implementação de envio de e-mails com:
--Confirmação de cadastro via link no e-mail.
--Redefinição de senha com link seguro por e-mail.
--Requisitos de senha forte ativados.
--Remoção do input redundante de e-mail na view ResetPassword.
--Proteção contra CSRF em todos os formulários.
--Uso de middlewares para proteger rotas conforme permissões de acesso.
+Sistema de registro com confirmação de e-mail via link.
 
-Organização do Projeto:
--Estruturado segundo o padrão MVC (Model-View-Controller).
--Código limpo, modularizado e preparado para futuras melhorias no frontend.
+Redefinição de senha segura por e-mail.
 
-🎯 Próximos Passos
+Requisitos de senha forte melhorados na seção de alteração de senha do perfil.
 
-A partir de agora, o foco será o desenvolvimento frontend deste projeto, bem como o início de novos projetos para ampliar ainda mais o aprendizado.
+Remoção do input redundante de e-mail na view ResetPassword.
 
-📝 Funcionalidades Planejadas
+Proteção CSRF em todos os formulários.
 
-Interface de usuário amigável e responsiva.
+Uso de middlewares para proteger rotas com base em permissões de acesso.
 
-Melhorias visuais e usabilidade com frameworks CSS/JS.
+🎠 Experiência Inicial
 
-Integração com outros projetos para explorar conceitos como APIs, SPA, etc.
+Adicionado carrossel de filmes na página inicial com Alpine.js.
+
+
+💡 Nota: O frontend atual ainda deixa a desejar. Por enquanto, não investirei em aprimorar o Tailwind CSS, pois decidi concentrar meus esforços em evoluir com JavaScript puro.
+O próximo projeto terá uma API REST robusta integrada a React ou Vue, com um backend mais complexo e desafiador.
+
+Num futuro próximo, pretendo retornar a este projeto para lapidar a parte visual com Tailwind, unificando backend sólido com uma interface moderna e responsiva.
+
 
 ⚙️ Tecnologias Utilizadas
 
@@ -70,10 +88,14 @@ PHP
 
 MySQL
 
-Seeders & Factories
+Blade Templating Engine
 
 Middleware
 
-Autenticação via e-mail
+Autenticação por E-mail
 
-Blade Templating Engine
+Seeders & Factories
+
+Alpine.js
+
+Se você leu até aqui, obrigado! Este repositório é um reflexo do meu esforço contínuo para crescer como desenvolvedor, aprendendo com cada erro e cada linha de código escrita do zero. 🚀

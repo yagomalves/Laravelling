@@ -1,79 +1,53 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Filmes</title>
-</head>
-<body>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
+            Lista de Categorias
+        </h2>
+    </x-slot>
 
-        <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden">
-             @if(auth()->user()->is_admin)        
-            <a href="{{ route('movies.index')}}">Filmes</a>
-            @else      
-            @endif
+
+    <br>
 
 
 
-            @if (Route::has('login'))
-                <nav class="flex items-center justify-end gap-4">
-                    @auth
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-nav-link>
-                        </form>
-                    </div>
+    <div class="py-6">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 text-center">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
 
-
-                    
-                    
-                        <a
-                            href="{{ url('/dashboard') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                        >
-                            Painel de Controle
-                        </a>
+                    @if($categories->isEmpty())
+                    <p>Não há categorias cadastradas ainda.</p>
                     @else
-                        <a
-                            href="{{ route('login') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal"
-                        >
-                            Log in
-                        </a>
-
-                        @if (Route::has('register'))
-                            <a
-                                href="{{ route('register') }}"
-                                >
-                                Register
-                            </a>
+                    @foreach ($categories as $category)
+                    <h2>{{ $category->name }} @if(auth()->user()->is_admin)
+                        @if(auth()->user()->is_admin)
+                        <form action="{{ route('movies.comments.destroy', ['id' => $movie->id, 'commentId' => $comment->id]) }}" method="POST" style="display:inline;">
+                           <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">
+                                Excluir
+                            </button> 
+                            @csrf
+                            @method('DELETE')
+                            
+                        </form>
                         @endif
-                    @endauth
-                </nav>
-            @endif
-        </header>
-    <h1>Lista de Categorias</h1>
-    @if(auth()->user()->is_admin)        
-            <a href="{{ route('categories.create')}}">Adicionar Categoria Nova</a>
-    @else      
-    @endif
-     @if($categories->isEmpty())
-            <p>Não há categorias cadastradas ainda.</p>
-        @else
-        @foreach ($categories as $category)
-            <h2>{{ $category->name }} @if(auth()->user()->is_admin)
-    <form action="{{ route('categories.destroy', ['id'=>$category->id]) }}" method="POST" style="display:inline;">
-        @csrf
-        @method('DELETE')
-        <button type="submit">DELETAR</button>
-    </form>
-@else
-    
-@endif</h2> 
-        @endforeach
-        @endif 
-</body>
-</html>
+                        @else
+
+                        @endif
+                    </h2>
+                    @endforeach
+                    @endif
+                    <br>
+                    <br>
+                    @if(auth()->user()->is_admin)
+                    <a href="{{ route('categories.create')}}">Adicionar Categoria Nova</a>
+                    @else
+                    @endif
+
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</x-app-layout>
