@@ -1,101 +1,113 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
-            Movies Reviews
-        </h2>
-    </x-slot>
+<div class="h-screen overflow-hidden bg-gradient-to-b from-[#1c0526] to-[#3b0a4b]">
+    <!-- Seção de destaque -->
+    <section class="bg-gradient-to-b from-[#1c0526] to-[#3b0a4b]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col-reverse md:flex-row items-center justify-between">
 
-
-    <div
-        x-data="carouselData({{ Js::from($movies) }})"
-        x-init="startAutoplay()"
-        class="relative w-full max-w-xl mx-auto bg-white rounded shadow p-6 mt-10">
-        <template x-if="movies.length > 0">
-            <div class="text-center">
-                <img
-                    :src="movies[current].image"
-                    alt="Capa do filme"
-                    class="mx-auto mb-4 w-full max-h-80 object-contain rounded">
-
-                <h2 class="text-2xl font-bold mb-2" x-text="movies[current].title"></h2>
-
-                <p class="text-gray-600 text-lg">
-                    Média de avaliação:
-                    <span x-text="movies[current].average_rating"></span> estrelas
+            <!-- Texto à esquerda -->
+            <div class="text-white md:w-1/2 mt-10 md:mt-0 text-center md:text-left">
+                <h1 class="text-4xl font-extrabold leading-tight mb-4">
+                    Comente e avalie o seu filme favorito.
+                </h1>
+                <p class="text-lg mb-6">
+                    Explore todos os filmes disponíveis e compartilhe sua opinião com a comunidade.
                 </p>
+                <a href="{{ route('movies.index') }}"
+                    class="inline-block bg-[#702e90] hover:bg-[#947cba] text-white font-semibold px-6 py-3 rounded shadow">
+                    Ver todos os filmes
+                </a>
             </div>
-        </template>
 
-        <!-- Controles -->
-        <div class="flex justify-between mt-6">
-            <button
-                @click="prevSlide()"
-                class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">
-                ‹
-            </button>
-            <button
-                @click="nextSlide()"
-                class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">
-                ›
-            </button>
+            <!-- Imagem à direita -->
+            <div class="w-1/2 mt-12 flex justify-center">
+                <img src="{{ asset('images/movie_time.jpg') }}" alt="Cinema" class="w-full max-w-md rounded shadow-lg">
+            </div>
+
         </div>
-    </div>
+    </section>
 
+    <section
+        x-data="carouselData({{ Js::from($movies->take(15)) }})"
+        x-init="startAutoplay()"
+        class="bg-[#3b0a4b] overflow-hidden">
 
-    @if(auth()->user()->is_admin)
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-
-                    <a href="{{ route('movies.create')}}">Adicionar Filme Novo</a>
-                    <br>
-
-                    <a href="{{ route('categories.create') }}">Criar nova categoria de filmes</a>
-
-                    <br>
+                <div
+                    class="flex transition-all duration-1000 ease-in-out"
+                    :style="`transform: translateX(-${currentIndex * (100 / visible)}%)`"
+                    x-ref="slider"
+                    @transitionend="handleTransitionEnd">
+                    <!-- Renderizar os filmes + cópia dos primeiros no final -->
+                    <template x-for="(movie, index) in duplicatedMovies" :key="index">
+                        <div class="min-w-[250px] max-w-[250px] mx-2 rounded shadow p-4 text-center">
+                            <img :src="`/storage/${movie.image_path}`" alt=""
+                                class="w-full h-36 object-cover rounded mb-2">
+                            <h3 class="text-base font-semibold text-gray-100" x-text="movie.title"></h3>
+                            <p class="text-sm text-gray-500">Média: <span x-text="Number(movie.average_rating).toFixed(1)"></span></p>
+                        </div>
+                    </template>
                 </div>
-            </div>
-        </div>
-    </div>
-    @else
-    @endif
-
-
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-
-
-                    <a href="{{ route('movies.index') }}">Ver todos os filmes</a>
-
-                    <br>
-                </div>
-            </div>
-        </div>
-    </div>
-
+            
+    </section>
+</div>
 
     <script>
         function carouselData(movies) {
             return {
-                movies,
-                current: 0,
+                originalMovies: movies,
+                duplicatedMovies: [],
+                currentIndex: 0,
+                visible: 3,
                 interval: null,
+                isTransitioning: true,
+
+                init() {
+                    // Duplicar os primeiros 'visible' filmes no final da lista para efeito de loop
+                    this.duplicatedMovies = [...this.originalMovies, ...this.originalMovies.slice(0, this.visible)];
+                },
 
                 startAutoplay() {
+                    this.init();
+
+                    // Responsividade
+                    if (window.innerWidth < 640) {
+                        this.visible = 1;
+                    } else if (window.innerWidth < 1024) {
+                        this.visible = 2;
+                    }
+
                     this.interval = setInterval(() => {
-                        this.nextSlide();
-                    }, 5000); // troca a cada 5 segundos
+                        this.next();
+                    }, 3500);
                 },
 
-                nextSlide() {
-                    this.current = (this.current + 1) % this.movies.length;
+                next() {
+                    this.isTransitioning = true;
+                    this.currentIndex++;
+
+                    // Se chegamos no "clone", após o último original
+                    if (this.currentIndex === this.originalMovies.length) {
+                        // Aguardar a transição terminar
+                        setTimeout(() => {
+                            this.isTransitioning = false;
+                            this.currentIndex = 0;
+                            this.$refs.slider.style.transition = "none";
+                            this.$refs.slider.style.transform = `translateX(-0%)`;
+
+                            // Reaplicar a transição suavemente depois
+                            requestAnimationFrame(() => {
+                                requestAnimationFrame(() => {
+                                    this.$refs.slider.style.transition = "transform 1s ease-in-out";
+                                });
+                            });
+                        }, 1000);
+                    }
                 },
 
-                prevSlide() {
-                    this.current = (this.current - 1 + this.movies.length) % this.movies.length;
+                handleTransitionEnd() {
+                    // Reinicia o loop aqui se necessário
+                    if (!this.isTransitioning && this.currentIndex === 0) {
+                        this.$refs.slider.style.transition = "transform 1s ease-in-out";
+                    }
                 }
             }
         }

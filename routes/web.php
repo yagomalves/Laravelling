@@ -9,18 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 
 
-Route::get('/', function () 
-{
-    if (Auth::check()) {
-        return redirect()->route('dashboard');
-    }
-    return view('guest');
-});
+Route::get('/', [DashboardController::class, 'index']);
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth'])
-    ->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::middleware('auth')->group(function () 
 {

@@ -8,16 +8,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $movies = Movie::with('ratings')->take(5)->get();
+        $movies = Movie::with('ratings')->latest()->take(10)->get(); // ou o número que quiser
 
-        return view('dashboard', [
-            'movies' => $movies->map(function ($movie) {
-                return [
-                    'title' => $movie->title,
-                    'average_rating' => $movie->averageRating(),
-                    'image' => asset('storage/' . $movie->image_path), // adapte conforme necessário
-                ];
-            })
-        ]);
+        return view('dashboard', compact('movies'));
     }
 }

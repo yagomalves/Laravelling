@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ class Movie extends Model
         'description',
         'release_date',
         'image_path'
-         // imagem do filme
+        // imagem do filme
     ];
 
     // Filme pode ter várias categorias
@@ -42,6 +43,12 @@ class Movie extends Model
 
         return round($this->ratings->avg('rating'), 1);
     }
+    // Faz com que average_rating apareça ao usar ->toArray() ou JsonResource
+    protected $appends = ['average_rating'];
 
-    
+    // Accessor: chama o seu método original
+    public function getAverageRatingAttribute()
+    {
+        return $this->averageRating(); // já arredonda lá dentro
+    }
 }

@@ -1,24 +1,25 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="text-center">
+<x-app-layout>    
 
-            @if(auth()->user()->is_admin)
-            <a href="{{ route('movies.create') }}" class="text-blue-600 hover:text-blue-800 font-semibold">
+<div class="align-center mt-6 justify-center text-center">
+    @if(auth()->user()->is_admin)
+            <a href="{{ route('movies.create') }}" class="text-white hover:text-gray-400 font-semibold">
                 Adicionar Filme Novo
             </a>
             @else
             <h2 class="text-2xl font-semibold text-gray-800">Comente e avalie os seus filmes favoritos!</h2>
             @endif
-        </div>
-    </x-slot>
+</div>
+            
+       
+
 
     @if($movies->isEmpty())
-    <p class="text-center mt-8 text-gray-600">Não há filmes cadastrados ainda.</p>
+    <p class="text-center mt-8 text-gray-400">Não há filmes cadastrados ainda.</p>
     @else
     <div class="space-y-12 mt-6">
         @foreach ($movies as $movie)
-        <div class="max-w-4xl mx-auto bg-white shadow-sm rounded-lg overflow-hidden">
-            <div class="p-6 text-gray-900">
+        <div class="max-w-4xl mx-auto bg-[#3b0a4b] shadow-sm rounded-lg overflow-hidden">
+            <div class="p-6 text-gray-400">
 
                 <!-- Título -->
                 <h2 class="text-3xl font-bold mb-4 text-center">{{ $movie->title }}</h2>
@@ -32,14 +33,14 @@
                 </div>
 
                 <!-- Descrição -->
-                <p class="mb-6 text-gray-700">{{ $movie->description }}</p>
+                <p class="mb-6 text-gray-400">{{ $movie->description }}</p>
 
                 <!-- Categorias -->
                 <h3 class="text-xl font-semibold mb-2">Categorias:</h3>
                 @if($movie->categories->isEmpty())
-                <p class="mb-4 text-gray-500">Nenhuma categoria associada.</p>
+                <p class="mb-4 text-gray-400">Nenhuma categoria associada.</p>
                 @else
-                <ul class="list-disc list-inside mb-6 text-gray-700">
+                <ul class="list-disc list-inside mb-6 text-white">
                     @foreach ($movie->categories as $category)
                     <li>{{ $category->name }}</li>
                     @endforeach
@@ -51,7 +52,7 @@
                 @if($movie->comments->isEmpty())
                 <p class="mb-4 text-gray-500">Nenhum comentário ainda.</p>
                 @else
-                <ul class="mb-6 space-y-2 text-gray-700">
+                <ul class="mb-6 space-y-2 text-white">
                     @foreach ($movie->comments as $comment)
                     <li>
                         {{ $comment->content }} - (por usuário {{ $comment->user->name }})
@@ -76,7 +77,7 @@
                 @if($movie->ratings->isEmpty())
                 <p class="mb-6 text-gray-500">Nenhuma avaliação ainda.</p>
                 @else
-                <p class="mb-6 text-gray-700 font-medium">Média: {{ $movie->averageRating() }}</p>
+                <p class="mb-6 text-white font-medium">Média: {{ $movie->averageRating() }}</p>
                 @endif
 
                 <hr class="mb-6">
